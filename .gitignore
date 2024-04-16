@@ -1,0 +1,5 @@
+/node_modules
+/keys
+*.pdf
+/scholarship-bills
+.env
