@@ -1,0 +1,69 @@
+{
+  "name": "uerm-rest-api-local",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@google-apps/meet": "^0.1.0",
+    "atob": "^2.1.2",
+    "axios": "^1.4.0",
+    "basic-ftp": "^4.6.3",
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.19.0",
+    "btoa": "^1.2.1",
+    "cdigit": "^3.1.0",
+    "cors": "^2.8.5",
+    "crypto-js": "^4.0.0",
+    "date-and-time": "^3.0.2",
+    "dotenv": "^8.2.0",
+    "express": "^4.18.2",
+    "express-fileupload": "^1.4.0",
+    "external-ip": "^2.3.1",
+    "formidable": "^1.2.2",
+    "googleapis": "^122.0.0",
+    "html-pdf": "^3.0.1",
+    "jsonwebtoken": "^9.0.0",
+    "jwt-decode": "^3.1.2",
+    "luxon": "^2.3.2",
+    "md5": "^2.3.0",
+    "mongoose": "^6.5.2",
+    "morgan": "^1.10.0",
+    "mssql": "^6.2.0",
+    "node-mailjet": "^3.3.4",
+    "otpauth": "^7.0.4",
+    "otplib": "^12.0.1",
+    "public-ip": "^6.0.1",
+    "pug": "^3.0.0",
+    "qrcode": "^1.4.4",
+    "redis": "^4.1.0",
+    "request-ip": "^3.3.0",
+    "slashes": "^2.0.2",
+    "socket.io": "^4.6.1",
+    "web-push": "^3.4.4",
+    "ws": "^7.5.0"
+  },
+  "optionalDependencies": {
+    "bufferutil": "^4.0.7",
+    "utf-8-validate": "^5.0.10"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dev-it-uerm/uerm-rest-api-local.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/dev-it-uerm/uerm-rest-api-local/issues"
+  },
+  "homepage": "https://github.com/dev-it-uerm/uerm-rest-api-local#readme",
+  "description": "UERM REST API (LOCAL)",
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "eslint-plugin-n": "^16.6.2",
+    "nodemon": "^3.1.0",
+    "prettier": "^3.2.5"
+  }
+}

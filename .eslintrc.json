@@ -1,0 +1,42 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true
+  },
+  "extends": ["eslint:recommended", "plugin:n/recommended"],
+  "plugins": ["n"],
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "rules": {
+    "eqeqeq": ["error", "always", { "null": "ignore" }],
+    "require-await": "error",
+    "no-cond-assign": "error",
+    "no-const-assign": "error",
+    "no-dupe-args": "error",
+    "no-mixed-operators": "error",
+    "no-useless-return": "error",
+    "no-useless-escape": "error",
+    "no-undef": "error",
+    "no-invalid-this": "error",
+    "no-return-assign": "error",
+    "no-unused-expressions": [
+      "error",
+      { "allowTernary": true, "allowTaggedTemplates": true }
+    ],
+
+    //* ES6
+    "arrow-spacing": "error",
+    "no-confusing-arrow": "error",
+    "no-duplicate-imports": "error",
+    "no-var": "error",
+    "object-shorthand": "off",
+    "prefer-const": "error",
+    "prefer-template": "warn",
+
+    // NODE.JS RULES
+    "n/exports-style": ["error", "module.exports"]
+  }
+}

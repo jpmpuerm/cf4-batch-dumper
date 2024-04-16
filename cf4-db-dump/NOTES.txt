@@ -1,0 +1,22 @@
+EASYCLAIMS SERVER IP:
+10.107.0.103
+
+
+
+
+TABLE CONNECTIONS:
+
+EClaim -> Consultation -> Patient, 
+                          PEPERT, 
+                          PhysicalExamination, 
+                          Subjective, 
+                          CourseWard, 
+                          Medicine
+
+Patient ->  Profile, 
+            MedicalHistory, 
+            MenstrualHistory -> PregnancyHistory
+
+CF4Claim -> Eclaim, 
+            Consultation,
+            Patient,
