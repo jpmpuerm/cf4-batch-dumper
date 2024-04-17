@@ -164,8 +164,7 @@ const insert__OLD = async (userCode, consultationId, item, txn) => {
   if (!txn) throw "`txn` is required.";
 
   if (!item) item = {};
-  console.log(item);
-  db.createRow(item, columns, true);
+  db.createRow(item, columns);
 
   const genericName = item.genericName;
 
@@ -191,7 +190,7 @@ const insert = async (userCode, consultationId, item, txn) => {
   if (!txn) throw "`txn` is required.";
 
   if (!item) item = {};
-  db.createRow(item, columns, true);
+  db.createRow(item, columns);
 
   const genericName = item.genericName;
   const dateAdded = jsDateToISOString(item.dateAdded);
