@@ -97,7 +97,8 @@ const dumpClaim = async (caseNo, txn) => {
   );
 
   if (eClaim) {
-    return { warning: `cf4-db-dump: eClaim for ${caseNo} already exists.` };
+    // return { warning: `cf4-db-dump: eClaim for ${caseNo} already exists.` };
+    return { warning: `eClaim already exists.` };
   }
 
   const _case =
@@ -305,7 +306,7 @@ const dumpClaim = async (caseNo, txn) => {
   const hospitalCode = "H93005943";
 
   const addedConsultation = await db.transact(async (txn) => {
-    console.log("Adding patient...");
+    // console.log("Adding patient...");
     const addedPatient = await patientModel.insert(
       userCode,
       pmccNo,
@@ -314,7 +315,7 @@ const dumpClaim = async (caseNo, txn) => {
       txn,
     );
 
-    console.log("Adding profile...");
+    // console.log("Adding profile...");
     const addedProfile = await profileModel.insert(
       userCode,
       addedPatient.id,
@@ -328,7 +329,7 @@ const dumpClaim = async (caseNo, txn) => {
       txn,
     );
 
-    console.log("Adding med hist...");
+    // console.log("Adding med hist...");
     if (pxMedHist) {
       const addedMedHist = await medHistModel.insert(
         userCode,
@@ -340,7 +341,7 @@ const dumpClaim = async (caseNo, txn) => {
       );
     }
 
-    console.log("Adding fam med hist...");
+    // console.log("Adding fam med hist...");
     if (pxFamMedHist) {
       const addedFamMedHist = await medHistModel.insert(
         userCode,
@@ -352,7 +353,7 @@ const dumpClaim = async (caseNo, txn) => {
       );
     }
 
-    console.log("Adding mens hist...");
+    // console.log("Adding mens hist...");
     const addedMensHist = await mensHistModel.insert(
       userCode,
       addedPatient.id,
@@ -373,7 +374,7 @@ const dumpClaim = async (caseNo, txn) => {
     //   txn
     // );
 
-    console.log("Adding consultation..");
+    // console.log("Adding consultation..");
     const addedConsultation = await consultationModel.insert(
       userCode,
       _case.caseNo,
@@ -395,7 +396,7 @@ const dumpClaim = async (caseNo, txn) => {
     // CF4 DETAILS
     for (const table in rowsToInsertMap) {
       for (const item of rowsToInsertMap[table]) {
-        console.log(`Inserting into table ${table}...`);
+        // console.log(`Inserting into table ${table}...`);
 
         await modelsMap[table].insert(
           userCode,

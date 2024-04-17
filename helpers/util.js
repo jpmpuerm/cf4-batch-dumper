@@ -1038,6 +1038,12 @@ const delay = function (ms) {
   return new Promise((res) => setTimeout(res, ms));
 };
 
+const generateFileName = (suffix, fileExt) => {
+  return `${jsDateToISOString(new Date())
+    .replace(/[ /:]/g, "-")
+    .slice(0, 16)}__${suffix}.${fileExt}`;
+};
+
 module.exports = {
   getIp,
   randomString,
@@ -1108,4 +1114,5 @@ module.exports = {
   addEllipsis,
   trim,
   delay,
+  generateFileName,
 };

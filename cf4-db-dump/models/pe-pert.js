@@ -13,9 +13,10 @@ const columns = [
     default: "",
     source: "physicalExaminationOnAdmissionVitalSignsBP",
     format: (val) => {
-      if (!val) return "";
-      const arr = val.split("/");
-      return arr[0].trim();
+      // if (!val) return "";
+      // const arr = val.split("/");
+      // return arr[0].trim();
+      return val?.toString().split("/")?.[0]?.trim() ?? "";
     },
   },
   {
@@ -23,9 +24,10 @@ const columns = [
     default: "",
     source: "physicalExaminationOnAdmissionVitalSignsBP",
     format: (val) => {
-      if (!val) return "";
-      const arr = val.split("/");
-      return arr[1].trim();
+      // if (!val) return "";
+      // const arr = val.split("/");
+      // return arr[1].trim();
+      return val?.toString().split("/")?.[1]?.trim() ?? "";
     },
   },
   {

@@ -170,17 +170,13 @@ const selectClaimDetails = async (caseNo, txn) => {
     txn,
   );
 
-  if (!_case) return [];
-
   const claim = await db.selectOne(
     "*",
     "DocumentMgt..Cf4Claims",
-    { caseNo },
+    { caseNo, status: 4 },
     txn,
     { camelized: true },
   );
-
-  if (!claim) return [];
 
   // const origMeds =
   //   (
@@ -206,7 +202,7 @@ const selectClaimDetails = async (caseNo, txn) => {
 const updateCf4Meds = async (claimCode, meds, txn) => {
   // console.log({ value: JSON.stringify(meds), updatedBy: "8225" });
   // console.log({ claimId: claimCode, fieldCode: "drugsOrMedicinesResult" });
-  // return null;
+  // return {};
 
   if (claimCode && meds && meds.length > 0) {
     return await db.updateOne(

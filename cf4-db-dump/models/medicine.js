@@ -103,7 +103,7 @@ const format = (val) => {
         quantity: med.quantity ?? med.qty ?? 0,
         route: med.route ? med.route.toUpperCase() : "",
         totalAmtPrice: med.cost ?? med.totalCost ?? 0,
-        dateAdded: med.dateTimeCharged ?? "",
+        dateAdded: med.dateTimeCharged ? new Date(med.dateTimeCharged) : null,
       };
     })
     .filter((med) => {
@@ -164,7 +164,8 @@ const insert = async (userCode, consultationId, item, txn) => {
   if (!txn) throw "`txn` is required.";
 
   if (!item) item = {};
-  db.createRow(item, columns);
+  console.log(item);
+  db.createRow(item, columns, true);
 
   const genericName = item.genericName;
 
