@@ -90,9 +90,7 @@ const dumpClaim = async (caseNo, txn) => {
   const eClaim = await db.selectOne(
     "*",
     "EasyClaimsOffline..Consultation",
-    {
-      eClaimId: caseNo,
-    },
+    { eClaimId: caseNo },
     cf4DbDumpConn,
   );
 

@@ -1,5 +1,5 @@
 const db = require("../../helpers/sql.js");
-const { buildHashTable } = require("../../helpers/util.js");
+const { buildHashTable, jsDateToISOString } = require("../../helpers/util.js");
 
 const tableName = "EasyClaimsOffline..medicine";
 
@@ -158,7 +158,7 @@ const select = async (caseNo) => {
   return rows;
 };
 
-const insert = async (userCode, consultationId, item, txn) => {
+const insert__OLD = async (userCode, consultationId, item, txn) => {
   if (!userCode) throw "`userCode` is required.";
   if (!consultationId) throw "`consultationId` is required.";
   if (!txn) throw "`txn` is required.";
@@ -182,6 +182,62 @@ const insert = async (userCode, consultationId, item, txn) => {
     "Created",
     "UpdatedBy",
     "Updated",
+  );
+};
+
+const insert = async (userCode, consultationId, item, txn) => {
+  if (!userCode) throw "`userCode` is required.";
+  if (!consultationId) throw "`consultationId` is required.";
+  if (!txn) throw "`txn` is required.";
+
+  if (!item) item = {};
+  db.createRow(item, columns, true);
+
+  const genericName = item.genericName;
+  const dateAdded = jsDateToISOString(item.dateAdded);
+
+  delete item.genericName;
+  delete item.dateAdded;
+
+  const existingMed =
+    (
+      await db.query(
+        `SELECT
+            *
+          FROM 
+            ${tableName}
+          WHERE
+            ConsultationId = ?
+            AND GenericName = ?
+            AND DateAdded = ?;`,
+        [consultationId, genericName, dateAdded],
+        txn,
+      )
+    )[0] ?? null;
+
+  if (existingMed) {
+    // console.log("Med exists. Updating the existing...");
+    return await db.update(
+      tableName,
+      { ...item, updatedBy: userCode },
+      { consultationId, genericName, dateAdded },
+      txn,
+      "Updated",
+    );
+  }
+
+  // console.log("Inserting new med...");
+  return await db.insert(
+    tableName,
+    {
+      ...item,
+      createdBy: userCode,
+      consultationId,
+      genericName,
+      dateAdded,
+    },
+    txn,
+    "Created",
   );
 };
 
