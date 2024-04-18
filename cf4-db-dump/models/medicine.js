@@ -102,7 +102,7 @@ const format = (val) => {
         }${form ? ` ${form.toUpperCase()}` : ""}|||||`,
         quantity: med.quantity ?? med.qty ?? 0,
         route: med.route ? med.route.toUpperCase() : "",
-        totalAmtPrice: med.cost ?? med.totalCost ?? 0,
+        totalAmtPrice: Number(med.cost ?? med.totalCost ?? 0),
         dateAdded: med.dateTimeCharged ? new Date(med.dateTimeCharged) : null,
       };
     })
@@ -110,78 +110,6 @@ const format = (val) => {
       // EXCLUDE MEDS WITH INCOMPLETE DETAILS
       return med.genericName && med.totalAmtPrice > 0 && med.dateAdded;
     });
-};
-
-const select = async (caseNo) => {
-  if (!caseNo) throw "`caseNo` is required.";
-
-  const sql = `
-    SELECT
-      T0.caseNo,
-      T0.CHARGESLIPNO chargeSlipNo,
-      T0.CHARGEDATETIME dateTimeCharged,
-      T3.itemCode,
-      T3.brandName,
-      T3.GenName genericName,
-      T3.MG strength, /* IN PHAR_ITEMS strength AND/OR unit CAN BE FOUND IN Mg */
-      T3.MG unit,
-      T3.DosageForm form, /* IN PHAR_ITEMS form AND/OR package CAN BE FOUND IN DosageForm */
-      T3.DosageForm package,
-      '' route,
-      T2.SellingPrice sellingPrice,
-      T2.DiscAmt discountAmount,
-      T2.Qty quantity,
-      ((T2.SellingPrice * T2.Qty) - T2.DiscAmt) totalCost
-    FROM 
-      [UERMMMC]..[CHARGES_MAIN] T0 WITH(NOLOCK)
-      INNER JOIN [UERMMMC]..[PHAR_Sales_Parent] T1 WITH(NOLOCK) ON T0.CHARGESLIPNO = T1.CSNo
-      INNER JOIN [UERMMMC]..[PHAR_Sales_Details] T2 WITH(NOLOCK) ON T1.SalesNo = T2.SalesNo
-      INNER JOIN [UERMMMC]..[PHAR_ITEMS] T3 WITH(NOLOCK) ON T2.ItemCode = T3.ItemCode
-    WHERE
-      (T0.CANCELED = 'N' AND T1.Cancelled = 0)
-      AND T3.PhicGroupCode = 'MED'
-      AND T0.CASENO = ?;
-  `;
-
-  // const prodDbConn = db.getConn("prod");
-  const rows = await db.query(
-    sql,
-    [caseNo],
-    // prodDbConn
-  );
-
-  if (rows.error) {
-    console.log(rows.error);
-    return [];
-  }
-
-  return rows;
-};
-
-const insert__OLD = async (userCode, consultationId, item, txn) => {
-  if (!userCode) throw "`userCode` is required.";
-  if (!consultationId) throw "`consultationId` is required.";
-  if (!txn) throw "`txn` is required.";
-
-  if (!item) item = {};
-  db.createRow(item, columns);
-
-  const genericName = item.genericName;
-
-  return await db.upsert(
-    tableName,
-    item,
-    {
-      consultationId,
-      genericName,
-    },
-    userCode,
-    txn,
-    "CreatedBy",
-    "Created",
-    "UpdatedBy",
-    "Updated",
-  );
 };
 
 const insert = async (userCode, consultationId, item, txn) => {
@@ -245,6 +173,5 @@ module.exports = {
   columns,
   columnsMap,
   format,
-  select,
   insert,
 };

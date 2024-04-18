@@ -142,7 +142,10 @@ const _selectMedicineCharges = async (caseNo, txn) => {
       --T2.SellingPrice sellingPrice,
       --T2.DiscAmt discountAmount,
       SUM(T2.Qty) quantity,
-      SUM((T2.SellingPrice * T2.Qty) - T2.DiscAmt) totalCost
+      SUM(
+        (CAST(T2.SellingPrice AS DECIMAL(20, 8)) * CAST(T2.Qty AS DECIMAL(20, 8))) 
+        - CAST(T2.DiscAmt AS DECIMAL(20, 8))
+      ) totalCost
     FROM 
       [UERMMMC]..[CHARGES_MAIN] T0 WITH(NOLOCK)
       INNER JOIN [UERMMMC]..[PHAR_Sales_Parent] T1 WITH(NOLOCK) ON T0.CHARGESLIPNO = T1.CSNo
@@ -214,6 +217,7 @@ const updateCf4Meds = async (claimCode, meds, txn) => {
       {
         claimId: claimCode,
         fieldCode: "drugsOrMedicinesResult",
+        status: 1,
       },
       txn,
     );

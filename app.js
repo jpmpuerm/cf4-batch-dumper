@@ -3,7 +3,7 @@ const fs = require("fs/promises");
 const initConn = require("./init-conns.js");
 const db = require("./helpers/sql.js");
 const caseNosMap = require("./case-nos.js");
-const { delay, generateFileName } = require("./helpers/util.js");
+const { delay } = require("./helpers/util.js");
 
 const { selectClaimDetails, updateCf4Meds } = require("./cf4/index.js");
 const { dumpClaim } = require("./cf4-db-dump/index.js");
@@ -30,7 +30,6 @@ const appendCSV = async (fileName, cols) => {
 
 (async () => {
   await initConn();
-  // const errors = [];
 
   for (const key in caseNosMap) {
     const dateCharged = key;
@@ -89,14 +88,6 @@ const appendCSV = async (fileName, cols) => {
         statusDescription,
       ]);
 
-      // errors.push({
-      //   dateCharged,
-      //   caseNo,
-      //   ...(result.warning
-      //     ? { warning: result.warning }
-      //     : { error: result.error }),
-      // });
-
       if (!result?.error) {
         await appendCSV("./logs/status-logs-billing.csv", [
           dateCharged,
@@ -107,20 +98,6 @@ const appendCSV = async (fileName, cols) => {
       }
     }
   }
-
-  // try {
-  //   process.stdout.write("Writing error-logs.json... ");
-  //   await fs.writeFile(
-  //     path.resolve(
-  //       process.cwd(),
-  //       `./logs/${generateFileName("error-logs", "json")}`,
-  //     ),
-  //     JSON.stringify(errors),
-  //   );
-  //   console.log("Success.");
-  // } catch (err) {
-  //   console.log(err);
-  // }
 
   console.log("Done.");
   process.exit();
