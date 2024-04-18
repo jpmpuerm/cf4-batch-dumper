@@ -123,7 +123,7 @@ const _formatMedsJson = (value) => {
   return value;
 };
 
-const _selectMedicineCharges = async (caseNo, txn) => {
+const selectMedicineCharges = async (caseNo, txn) => {
   const sql = `
     SELECT
       --T0.caseNo,
@@ -196,7 +196,7 @@ const selectClaimDetails = async (caseNo, txn) => {
   //     )
   //   )?.value ?? null;
 
-  const newMeds = await _selectMedicineCharges(caseNo, txn);
+  const newMeds = await selectMedicineCharges(caseNo, txn);
   // const meds = newMeds.length > 0 ? newMeds : _formatMedsJson(origMeds);
 
   return [_case, claim, newMeds];
@@ -227,6 +227,7 @@ const updateCf4Meds = async (claimCode, meds, txn) => {
 };
 
 module.exports = {
+  selectMedicineCharges,
   selectClaimDetails,
   updateCf4Meds,
 };

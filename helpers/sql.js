@@ -164,12 +164,13 @@ const select = async (columns, table, conditions, txn, options) => {
   if (empty(columns) || !table)
     throw "`columns` and `table` arguments are required.";
 
+  if (!options) options = {};
+
   //  For backward compatibility [START]
   if (options.order) options.orderBy = options.order;
   delete options.order;
   //  For backward compatibility [END]
 
-  if (!options) options = {};
   const [whereStr, whereArgs] = where(conditions);
 
   const command = `
