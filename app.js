@@ -15,8 +15,10 @@ const appendCSV = async (fileName, cols) => {
     await fs.appendFile(
       path.resolve(process.cwd(), fileName),
       cols
-        .map((col) => `"${col}"`)
-        .join("\t")
+        .map((col) =>
+          col.replace(/[,"]/g, "").replace(/\t/g, "  ").replace(/\n/g, ";"),
+        )
+        .join(",")
         .concat("\n"),
     );
 

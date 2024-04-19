@@ -1,15 +1,19 @@
 -- CLAIM DETAILS
-select * from uermmmc..cases where caseNo = '1225047B'
-select * from DocumentMgt..CF4Claims where caseNo = '0098074'
+select
+  cd.*
+from
+  DocumentMgt..CF4ClaimDetails cd
+  left join DocumentMgt..CF4Claims c ON c.Code = cd.ClaimId
+where
+  c.caseNo = '0098254'
+  --cd.DeletedBy = '8225'
+  and cd.fieldCode = 'drugsOrMedicinesResult'
+  --and cd.status = 1
+
+
 
 
 -- ECLAIMS
-
-select * from EasyClaimsOffline..patient where id = 1962;
-select * from EasyClaimsOffline..Consultation where eClaimId = '0098078'
-select * from EasyClaimsOffline..Medicine where consultationId = 44254
-
-
 SELECT DISTINCT
   c.eClaimId,
   c.Id ConsultationId,

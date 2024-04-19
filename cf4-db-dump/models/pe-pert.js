@@ -4,7 +4,12 @@ const { buildHashTable } = require("../../helpers/util.js");
 const tableName = "EasyClaimsOffline..pePert";
 
 const getNumberPart = (val) => {
-  return val.match(/[0-9]*\.?[0-9]+/)[0];
+  return Number(
+    val
+      ?.toString()
+      ?.match(/[0-9]*\.?[0-9]+/)
+      ?.at(0) ?? 0,
+  );
 };
 
 const columns = [
@@ -59,8 +64,7 @@ const columns = [
     default: null,
     source: "physicalExaminationOnAdmissionHeight",
     format: (val) => {
-      if (!val) return 0;
-      return (getNumberPart(val) ?? 0) * 100;
+      return getNumberPart(val) * 100;
     },
   },
   {
