@@ -5,7 +5,7 @@ const db = require("./helpers/sql.js");
 const caseNosMap = require("./case-nos.js");
 const { delay } = require("./helpers/util.js");
 
-const { selectClaimDetails, updateCf4Meds } = require("./cf4/index.js");
+const { selectClaimDetails, upsertCf4Meds } = require("./cf4/index.js");
 const { dumpClaim } = require("./cf4-db-dump/index.js");
 
 const appendCSV = async (fileName, cols) => {
@@ -61,7 +61,7 @@ const appendCSV = async (fileName, cols) => {
         }
 
         if (newMeds && newMeds.length > 0) {
-          await updateCf4Meds(claim.code, newMeds, txn);
+          await upsertCf4Meds(claim.code, newMeds, txn);
         }
 
         return await dumpClaim(caseNo, txn);
@@ -88,6 +88,7 @@ const appendCSV = async (fileName, cols) => {
         statusDescription,
       ]);
 
+      // LOG SUCCESS AND WARNING TO BILLING LOGS COPY
       if (!result?.error) {
         await appendCSV("./logs/status-logs-billing.csv", [
           dateCharged,

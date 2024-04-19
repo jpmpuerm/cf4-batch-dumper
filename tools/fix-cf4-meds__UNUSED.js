@@ -13,8 +13,8 @@ const db = require("../helpers/sql.js");
         DocumentMgt..CF4ClaimDetails
       WHERE
         fieldCode = 'drugsOrMedicinesResult'
-        and status = 1
-        --and value like '%dateTimeCharged%'
+        AND status = 1
+        --AND value like '%dateTimeCharged%'
       GROUP BY
         claimId, fieldCode
       HAVING

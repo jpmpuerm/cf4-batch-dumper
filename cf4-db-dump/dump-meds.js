@@ -77,7 +77,6 @@ const dumpMeds = async (caseNo, txn) => {
   });
 
   const formattedMeds = medicineModel.format(sanitizedMeds);
-  // console.log(formattedMeds);
 
   const insertedMeds = await db.transact(async (txn) => {
     const consultation = await db.selectOne(
@@ -91,6 +90,10 @@ const dumpMeds = async (caseNo, txn) => {
       const insertedMeds = [];
 
       for (const med of formattedMeds) {
+        // console.log(userCode);
+        // console.log(consultation.id);
+        // console.log(med);
+
         insertedMeds.push(
           await medicineModel.insert(userCode, consultation.id, med, txn),
         );

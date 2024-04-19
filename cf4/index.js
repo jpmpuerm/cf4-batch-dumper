@@ -202,23 +202,87 @@ const selectClaimDetails = async (caseNo, txn) => {
   return [_case, claim, newMeds];
 };
 
-const updateCf4Meds = async (claimCode, meds, txn) => {
+const upsertCf4Meds = async (claimCode, meds, txn) => {
   // console.log({ value: JSON.stringify(meds), updatedBy: "8225" });
   // console.log({ claimId: claimCode, fieldCode: "drugsOrMedicinesResult" });
   // return {};
 
   if (claimCode && meds && meds.length > 0) {
+    const cf4MedsRow = (
+      await db.query(
+        `
+          SELECT
+            MAX(Id) id
+          FROM
+            DocumentMgt..Cf4ClaimDetails
+          WHERE
+            ClaimId = ?
+            AND FieldCode = 'drugsOrMedicinesResult'
+            AND Status = 1;
+        `,
+        [claimCode],
+        txn,
+        false,
+      )
+    )[0];
+
+    if (!cf4MedsRow || !cf4MedsRow.id) {
+      return await db.insertOne(
+        "DocumentMgt..Cf4ClaimDetails",
+        {
+          claimId: claimCode,
+          fieldCode: "drugsOrMedicinesResult",
+          status: 1,
+          value: JSON.stringify(meds),
+          createdBy: "8225",
+        },
+        txn,
+      );
+    }
+
+    // SOFT-DELETE ACTIVE `drugsOrMedicinesResult` BUT THE LAST ONE
+    // await db.query(
+    //   `
+    //     UPDATE DocumentMgt..Cf4ClaimDetails SET
+    //       Status = 0
+    //     WHERE
+    //       ClaimId = ?
+    //       AND FieldCode = 'drugsOrMedicinesResult'
+    //       AND Status = 1
+    //       AND Id <> (
+    //         SELECT MAX(Id) Id FROM DocumentMgt..Cf4ClaimDetails
+    //         WHERE ClaimId = ?
+    //         AND FieldCode = 'drugsOrMedicinesResult'
+    //         AND Status = 1
+    //       );
+    //   `,
+    //   [claimCode, claimCode],
+    //   txn,
+    // );
+    await db.query(
+      `
+        UPDATE DocumentMgt..Cf4ClaimDetails SET
+          Status = 0,
+          DeletedBy = '8225',
+          DateTimeDeleted = GETDATE()
+        WHERE
+          FieldCode = 'drugsOrMedicinesResult'
+          AND Status = 1
+          AND ClaimId = ?
+          AND Id <> ?;
+      `,
+      [claimCode, cf4MedsRow.id],
+      txn,
+    );
+
+    // UPDATE LAST ACTIVE `drugsOrMedicinesResult`
     return await db.updateOne(
       "DocumentMgt..Cf4ClaimDetails",
       {
         value: JSON.stringify(meds),
         updatedBy: "8225",
       },
-      {
-        claimId: claimCode,
-        fieldCode: "drugsOrMedicinesResult",
-        status: 1,
-      },
+      { id: cf4MedsRow.id },
       txn,
     );
   }
@@ -229,5 +293,5 @@ const updateCf4Meds = async (claimCode, meds, txn) => {
 module.exports = {
   selectMedicineCharges,
   selectClaimDetails,
-  updateCf4Meds,
+  upsertCf4Meds,
 };

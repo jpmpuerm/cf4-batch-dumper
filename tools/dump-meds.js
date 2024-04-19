@@ -3,7 +3,7 @@ const db = require("../helpers/sql.js");
 const { delay } = require("../helpers/util.js");
 const dumpMeds = require("../cf4-db-dump/dump-meds.js");
 
-const caseNos = ["0098102", "0098204"];
+const caseNos = ["0098203"];
 
 (async () => {
   await initConn();
